@@ -1,0 +1,44 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[toc]{glossaries}
+
+\makeglossaries
+
+\newglossaryentry{latex}
+{
+  name=latex,
+  description={Is a mark up language specially suited for scientific documents}
+}
+
+\newglossaryentry{maths}
+{
+  name=mathematics,
+  description={Mathematics is what mathematicians do}
+}
+
+\newglossaryentry{formula}
+{
+  name=formula,
+  description={A mathematical expression}
+}
+
+\title{How to create a glossary}
+\author{My Name}
+\date{today}
+
+\begin{document}
+\maketitle
+\newpage
+
+\tableofcontents
+\clearpage
+
+\section{First Section}
+The \Gls{latex} typesetting markup language is specially suitable
+for documents that include \gls{maths}.
+
+\clearpage
+
+\printglossaries
+
+\end{document}
