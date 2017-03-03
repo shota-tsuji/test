@@ -1,5 +1,0 @@
-# This is a file which selects files I want git to ignore tracing.
-#*.txt
-#*~
-*.out
-test/
