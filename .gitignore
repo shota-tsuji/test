@@ -1,0 +1,21 @@
+# This is a file which selects files I want git to ignore tracing.
+#*.txt
+#*~
+*.out
+test/
+
+# For files assosiated latex.
+*.aux
+*.dvi
+*.log
+*.glg
+*.glo
+*.gls
+*.ist
+*.toc
+*.xdy
+*.acn
+*.acr
+*.alg
+*.snm
+*.nav

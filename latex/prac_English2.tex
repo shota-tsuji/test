@@ -1,0 +1,170 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[nonumberlist, toc, nogroupskip, nopostdot, style=altlist]{glossaries}
+
+\makeglossaries
+
+\newglossaryentry{latex}
+{
+  name=latex,
+  description={Is a mark up language specially suited for scientific documents}
+}
+
+\newglossaryentry{maths}
+{
+  name=mathematics,
+  description={Mathematics is what mathematicians do}
+}
+
+\newglossaryentry{formula}
+{
+  name=formula,
+  description={A mathematical expression}
+}
+
+\longnewglossaryentry{at random}
+{name={at random}}
+{%
+    Without a governing design, method, or purpose; unsystematically:\\
+    Chose a card at random from the desk.
+}
+
+\longnewglossaryentry{consequence}
+{name={consequence}}
+{%
+  the effect, result, or outcome of something occurring earlier:\\
+  The accident was the consequence of reckless driving.
+}
+
+\longnewglossaryentry{pertain}
+{name={pertain}}
+{%
+  Be appropriate, related, or applicable to.\\
+  The university relations officer works to represent students on all matters pertaining to governance of the university.\\
+  My father was very sure about certain matters pertaining to the universe.
+}
+
+\longnewglossaryentry{facilitate}
+{name={facilitate}}
+{%
+  to make something possible or easier:\\
+  The new ramp will facilitate the entry of wheelchairs.\\
+  The current structure does not facilitate efficent work flow.
+}
+
+\longnewglossaryentry{interdisciplinary}
+{name={interdisciplinary}}
+{%
+  combining or involving two or more academic disciplines or fields of study:\\
+  The economics and history departments are offering an interdisciplinary seminar on Asia.
+}
+
+\longnewglossaryentry{subsequent}
+{name={subsequent}}
+{%
+  coming after something in time; following:\\
+  occurring or coming later or after (often followed by to): subsequent events:\\
+  The theory was developed subsequent to the earthquake of 1906.\\
+  Subsequent to their arrival in Chicago, they bought a new car.\\
+  following in order or succession; succeeding:\\
+  a subsequent section in a treaty.
+}
+
+\longnewglossaryentry{succession}
+{name={succession}}
+{%
+  a number of people or things of a similar kind following one after the other:\\
+  She had been secretary to a succession of board directors.
+}
+
+\longnewglossaryentry{secretary}
+{name={secretary}}
+{%
+  someone who works in an office, writing letters, making phone calls, and arranging meetings for a person or for a organization:\\
+  Unless it's marked 'private', my secretary usually opens my post.
+}
+
+\longnewglossaryentry{BofD}
+{name={Board of Directors}}
+{%
+  A board of directors governs a corporation. It is a group of people who are elected by a company's shareholders to meet periodicaly to oversee thecompany's management and represent the interests of the shareholders.\\
+  The board of directors may be comprised of senior managers of the company, as well as outsiders with special skills that can be of assistance to the company.
+}
+
+\longnewglossaryentry{celestial}
+{name={celestial}}
+{%
+  positioned in or relating to the sky, or outer space as observed in astronomy:\\
+  A celestial body.\\
+  Galileo took the position that all celestial phenomena should be interpreted in terms of terrestrial analogies, against Aristotle's basic postulate of essential differences.
+}
+
+\longnewglossaryentry{interpret}
+{name={interpret}}
+{%
+  Explain the meaning of (information or actions):\\
+  The evidence is difficult to interpret.
+}
+
+\longnewglossaryentry{terrestrial}
+{name={terrestrial}}
+{%
+  On or relating to the earth:\\
+  Increased  ultraviolet radiation may disrupt terrestrial ecosystems.
+}
+
+\longnewglossaryentry{aperiodic}
+{name={aperiodic}}
+{%
+  not periodic; irregular:
+}
+
+\longnewglossaryentry{autonomous}
+{name={autonomous}}
+{%
+  (of a country or region) having the freedom to govern itself or control its own affairs.\\
+  The federation included sixteen autonomous republics.
+}
+
+\longnewglossaryentry{republic}
+{name={republic}}
+{%
+  A state in which supreme power is held by the people and their elected representatives, and which has an elected or nominated president rather than a monarch.
+}
+
+\longnewglossaryentry{federation}
+{name={federation}}
+{%
+  A group of states with a central governemnt but independence in internal affairs.\\
+  {[in names]} 'the Russian Federation'\\
+  To be sure, as the history of the European Union shows, there can be federalism without a federation.
+}
+
+\longnewglossaryentry{AKA}
+{name={Also Known As}}
+{%
+  AKA means "Also Known As." AKA is an acronym, abbreviation or slang word that is explained above where the AKA definition is given.
+}
+
+\title{How to create a glossary}
+\author{Shota Tsuji}
+\date{\today}
+
+\begin{document}
+\maketitle
+\newpage
+
+\tableofcontents
+\clearpage
+
+\section{First Section}
+The \Gls{latex} typesetting markup language is specially suitable
+for documents that include \gls{maths}.
+
+\clearpage
+
+%\glsaddall[types=symbolslist]
+\glsaddall
+\printglossary
+
+\end{document}
