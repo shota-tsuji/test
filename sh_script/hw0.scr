@@ -1,0 +1,19 @@
+Script started on 2017年02月22日 18時00分38秒
+[[1;34mshota[00m]$ ls
+[0m[01;34mdata[0m     [01;34mlatex[0m   [01;34mothers[0m  [01;34mprac[0m     report.log  texput.log
+hw0.scr  [01;34mopenGL[0m  [01;34mphy[0m     prog1.f  [01;34msh_script[0m
+[[1;34mshota[00m]$ which stk
+[[1;34mshota[00m]$ cat prog1.f 
+	program prog1
+	integer i,x,n
+	read(*,*) n
+	x = o
+	do 10 i=1,n
+		x=x+i
+10	continue
+	write(*,*) 'x=',x
+	end
+[[1;34mshota[00m]$ exit
+exit
+
+Script done on 2017年02月22日 18時00分59秒
