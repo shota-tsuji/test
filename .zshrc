@@ -102,7 +102,11 @@ autoload -U colors ; colors
 # Adding Mar/22/2017
 #PROMPT='[%F{cyan}%B%n%b%f]%# '
 #RPROMPT='[%F{green}%B%~%b%f]'
-PROMPT='[%B%n%b]%# '
+#PROMPT='[%B%n%b]%# '
+#PS1=$'\e[0;94m \e[0m'
+#PS1=$'[\e[0;94m%B%n%b\e[0m]%# '
+#PROMPT=$'[\e[0;94m%B%n%b\e[0m]%# '
+PROMPT='[%F{blue}%B%n%b%f]%# '
 RPROMPT='[%B%~%b]'
 
 # lsコマンドでの色付け
