@@ -19,3 +19,7 @@ test/
 *.alg
 *.snm
 *.nav
+
+# Adding Mar/22/2017
+# For data file.
+*.dat
