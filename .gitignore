@@ -23,3 +23,6 @@ test/
 # Adding Mar/22/2017
 # For data file.
 *.dat
+
+# Adding Mar/28/2017
+*.pdf
