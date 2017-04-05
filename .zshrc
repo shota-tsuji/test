@@ -108,6 +108,8 @@ autoload -U colors ; colors
 #PROMPT=$'[\e[0;94m%B%n%b\e[0m]%# '
 PROMPT='[%F{blue}%B%n%b%f]%# '
 RPROMPT='[%B%~%b]'
+# Adding Apr/03/2017
+#PROMPT=\n'[%F{blue}%B%n%b%f]%# '
 
 # lsコマンドでの色付け
 # Adding Mar/22/2017
@@ -151,6 +153,8 @@ alias mkdir='mkdir -p'
 alias g++='g++ -std=c++11'
 alias clang++='clang++ -std=c++11'
 alias platex='platex -shell-escape'
+# Adding Mar/26/2017
+alias lt='ls -t'
 
 # sudoの後ろのコマンドでのエイリアスを有効化
 alias sudo='sudo '
@@ -158,6 +162,12 @@ alias sudo='sudo '
 # グローバルエイリアス
 alias -g L='| less'
 alias -g G="| grep"
+
+# Adding Apr/04/2017
+cd ()
+{
+	builtin cd "$@" && ls
+}
 
 
 
@@ -174,4 +184,4 @@ export PKG_CONFIG_PATH
 # open-mpi
 
 # Adding Mar/22/2017
-export HISTTIMEFORMAT='%F %T '
+#export HISTTIMEFORMAT='%F %T '
