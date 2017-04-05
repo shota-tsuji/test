@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
-result = np.loadtxt("./result.csv", delimiter=",")
+result = np.loadtxt("./result2.csv", delimiter=",")
 #print result[0]
 loop = result.shape[0]
 fig = plt.figure()

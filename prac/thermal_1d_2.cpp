@@ -7,12 +7,14 @@ using namespace std;
 
 #define N 5
 
+int GaussElimination(vector< vector<double> > &A, int n);
 // return: success 1, fail 0.
 int LUDecomp(vector< vector<double> > &A, int n)
 {
   if(n <= 0) return 0;
 
   for(int i=0; i<n; ++i){
+    // l_ij (i >= j)
     for(int j=0; j<=i; ++j){
       double lu = A[i][j];
       for(int k=0; k<j; ++k){
@@ -27,7 +29,8 @@ int LUDecomp(vector< vector<double> > &A, int n)
       for(int k=0; k<i; ++k){
         lu -= A[i][k]*A[k][j]; // l_ik * u_kj
       }
-      A[i][j] = lu/A[i][j];
+      //A[i][j] = lu/A[i][j];
+      A[i][j] = lu/A[i][i];
     }
   }
 
@@ -59,6 +62,123 @@ int LUSolver(const vector< vector<double> > &A, const vector<double> &b, vector<
   return 1;
 }
 
+int main()
+{
+  double dx = 0.2;
+  double dt = 0.01;
+  double k = 1;
+  double r = k*dt/(dx*dx);
+  double T0 = 0, Tw = 100;
+  //vector<double> T(N);
+  //vector<double> T1(N-2);
+  /*
+  vector<double> T{0, 0, 0};
+  vector< vector<double> > B{{1, 0, 0, 0, 0},
+                             {-r, 1+2*r, -r, 0, 0},
+                             {0, -r, 1+2*r, -r, 0},
+                             {0, 0, -r, 1+2*r, -r},
+                             {0, 0, 0, 0, 1}};
+  */
+  double A[N][N+1] = {
+   {1, 0, 0, 0, 0},
+   {-r, 1+2*r, -r, 0, 0},
+   {0, -r, 1+2*r, -r, 0},
+   {0, 0, -r, 1+2*r, -r},
+   {0, 0, 0, 0, 1}   };
+  double T[N] = {100, 0, 0, 0, 100};
+  for(int i=0; i<N; ++i){
+    A[i][N] = T[i];
+  }
+  for(int i=0; i<N; ++i){
+    for(int j=0; j<N+1; ++j){
+      cout << A[i][j] << " ";
+    }
+    cout << '\n';
+  }
+  const int loop = 15;
+
+  //T1[0] = T[0];
+  //T1[N-1] = T[N-1];
+
+  ofstream outfile;
+  outfile.open("result2.csv");
+  //LUDecomp(B, N-2);
+  /*
+  for(int i=0; i<B.size(); ++i){
+    for(int j=0; j<B[i].size(); ++j){
+      cout << B[i][j] << " ";
+    }
+    cout << endl;
+  }
+  return 0;
+  */
+  //LUSolver(B, T, T1, N-2);
+  double pivot, mul;
+  for(int step=0; step<loop; ++step){
+    double A[N][N+1] = {
+     {1, 0, 0, 0, 0},
+     {-r, 1+2*r, -r, 0, 0},
+     {0, -r, 1+2*r, -r, 0},
+     {0, 0, -r, 1+2*r, -r},
+     {0, 0, 0, 0, 1}   };
+    for(int i=0; i<N; ++i){
+      A[i][N] = T[i];
+    }
+
+    for(int i=0; i<N; ++i){
+      pivot = A[i][i];
+      for(int j=0; j<N+1; ++j){
+        A[i][j] = (1 / pivot) * A[i][j];
+      }
+
+      // 階段行列をつくる．現在の行より下の行について，i列目成分が0になるように基本変形
+      for(int k=i+1; k<N; ++k){
+        mul = A[k][i];
+        for(int n=i; n<N+1; ++n){
+          A[k][n] = A[k][n] - mul * A[i][n];
+        }
+      }
+
+      for(int i=N-1; i>0; --i){
+        for(int k=i-1; k>=0; --k){
+          mul = A[k][i];
+          for(int n=i; n<N+1; ++n){
+            A[k][n] = A[k][n] - mul * A[i][n];
+          }
+        }
+      }
+    }
+    int i=0;
+    for(i=0; i<N-1; ++i){
+      T[i] = A[i][N];
+      cout << T[i] << " ";
+      //cout << A[i][N] << " ";
+      outfile  << T[i] << ",";
+    }
+    cout << T[i] << "\n";
+    outfile << T[i] << "\n";
+    for(int i=0; i<N; ++i){
+      //A[i][N] = T[i];
+    }
+
+    /*
+    for(int i=1; i<N-1; ++i){
+      T1[i] = T[i] + k*dt/(dx*dx) * (T[i-1] -2.0*T[i] + T[i+1]);
+    }
+    */
+
+    /*
+    for(auto it=T.begin(); it!=T.end(); ++it){
+      cout << *it << " ";
+    }
+    */
+    //T.clear();
+    //copy(T1.begin(), T1.end(), back_inserter(T));
+  }
+
+  return 0;
+}
+
 int GaussElimination(vector< vector<double> > &A, int n)
 {
   // Forward elimination. Upper trigonal matrix.
@@ -83,56 +203,4 @@ int GaussElimination(vector< vector<double> > &A, int n)
   }
 
   return 1;
-}
-
-int main()
-{
-  double dx = 0.2;
-  double dt = 0.01;
-  double k = 1;
-  double r = k*dt/(dx*dx);
-  double T0 = 0, Tw = 100;
-  //vector<double> T(N);
-  vector<double> T{0, 0, 0};
-  vector< vector<double> > B{{1+2*r, -r, 0},
-                             {-r, 1+2*r, -r},
-                             {0, 0, -r, 1+2*r}};
-  vector<double> T1(N-2);
-  const int loop = 25;
-
-  T1[0] = T[0];
-  T1[N-1] = T[N-1];
-
-  ofstream outfile;
-  outfile.open("result2.csv");
-  //LUDecomp(B, N-2);
-  //LUSolver(B, T, T1, N-2);
-  for(int step=0; step<loop; ++step){
-    //cout << T[0] << " ";
-    cout << T0 << " ";
-    outfile << T0;
-    /*
-    for(auto it=T.begin(); it!=T.end(); ++it){
-      cout << *it << " ";
-      outfile << "," << *it;
-    }
-    */
-    cout << " " << Tw << endl;
-    outfile << "," << Tw << endl;
-
-    /*
-    for(int i=1; i<N-1; ++i){
-      T1[i] = T[i] + k*dt/(dx*dx) * (T[i-1] -2.0*T[i] + T[i+1]);
-    }
-    */
-    //LUSolver(B, T, T1, N-2);
-    for(auto it=T.begin(); it!=T.end(); ++it){
-      cout << *it << " ";
-    }
-    T.clear();
-    copy(T1.begin(), T1.end(), back_inserter(T));
-
-  }
-
-  return 0;
 }
