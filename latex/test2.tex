@@ -1,0 +1,363 @@
+\documentclass[dvipdfmx]{beamer}
+%\documentclass[dvipdfmx,usenames]{beamer}
+\usepackage{graphicx}
+\usepackage{color}
+\usetheme{Warsaw}
+\usepackage{beamerthemeshadow}
+\usepackage{tikz}
+\usepackage[varg]{txfonts}
+\usepackage{booktabs}
+\renewcommand{\kanjifamilydefault}{\gtdefault}
+% 隠しているアイテムを半透明で表示
+\setbeamercovered{transparent}
+% ナビゲーションの非表示
+\setbeamertemplate{navigation symbols}{}
+\everymath{\displaystyle}
+%各節の始まりで発表の流れを示す
+\AtBeginSection[]
+{\begin{frame}{発表の流れ}
+  \tableofcontents[currentsection]
+\end{frame}}
+%ページ番号の表示
+\setbeamertemplate{footline}[frame number]
+% しおりをつくる
+\usepackage{hyperref}
+%しおりをつくるsectionの深さや，目次のリンクの色などを指定
+%\usepackage[usenames]{color}
+%\usepackage[bookmarksopenlevel=2]{hyperref}
+%しおりを日本語対応にする
+\usepackage{pxjahyper}
+%amsmathとhyperrefとの互換性
+\usepackage{amsmath}
+\let\equation\gather
+\let\endequation\endgather
+
+\setbeamertemplate{headline}{%
+\leavevmode%
+  \hbox{%
+    \begin{beamercolorbox}[wd=\paperwidth,ht=2.5ex,dp=1.125ex]{palette quaternary}
+      \insertsectionnavigationhorizontal{\paperwidth}{}{\hskip0pt plus1filll}
+    \end{beamercolorbox}
+  }
+}
+
+\setbeamertemplate{enumerate item}[circle]
+
+%ページ数カウント
+\newcommand{\backupbegin}{
+  \newcounter{framenumberappendix}
+  \setcounter{framenumberappendix}{\value{framenumber}}
+}
+\newcommand{\backupend}{
+  \addtocounter{framenumberappendix}{-\value{framenumber}}
+  \addtocounter{framenumber}{\value{framenumberappendix}}
+}
+
+
+%\usepackage{emath}
+%\usepackage{emathMw}
+\usepackage{subcaption}
+
+\title{手書き文字認識(MNIST)}
+\institute{工学院大学}
+\author{情報学部コンピュータ科 j114081 \\ 辻　祥太}
+\date{}
+
+\begin{document}
+
+\section*{はじめ}
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}[plain]
+  \frametitle{発表内容}
+  \tableofcontents
+\end{frame}
+
+\begin{frame}
+  \frametitle{MNISTデータの識別}
+  やりたいこと
+  \begin{itemize}
+    \item ある画像が，0\textasciitilde9のいずれであるかを判定
+    \item kNN法のkの個数による正答率の比較
+    \item 主成分分析による正答率の変化
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{MNISTデータとは}
+  \begin{itemize}
+    \item 手書きの数字0\textasciitilde9
+    \item サイズは28*28
+    \item Trainデータ60000枚，Testデータ10000枚
+  \end{itemize}
+  \begin{figure}
+    \centering
+    \begin{minipage}{0.4\columnwidth}
+      \centering
+      \includegraphics[width=\columnwidth]{./rep_pic/rep_image0.png}
+    \end{minipage}
+    \begin{minipage}{0.4\columnwidth}
+      \centering
+      \includegraphics[width=\columnwidth]{./rep_pic/rep_image1.png}
+    \end{minipage}
+  \end{figure}
+\end{frame}
+
+\section{kNN}
+\begin{frame}
+  \frametitle{kNN}
+  kNN法のアルゴリズム
+  \begin{enumerate}
+    \item \structure{kの値}を決定する
+    \item 推定したい一点の\structure{近傍にあるデータ}をk個選択する
+    \item k個のデータのなかで\structure{多数決をとる}
+    \item 最多となるラベル（カテゴリ）を，推定ラベルとする
+  \end{enumerate}
+  \begin{center}
+    \begin{figure}
+      \includegraphics[width=0.6\paperwidth]{./rep_pic/example_knn.png}
+    \end{figure}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{kNN法}
+  近傍点の数kの決め方
+  \begin{itemize}
+    \item kが小さい $ \Rightarrow $ ノイズに弱い
+    \item kが大きい $ \Rightarrow $ 他クラスのデータも含みやすい
+  \end{itemize}
+%  \begin{minipage}{0.4\textwidth}
+%    \centering
+%    \includegraphics[width=0.4\textwidth]{./example_knn2.png}
+%  \end{minipage}
+%  \begin{minipage}{0.4\textwidth}
+%    \centering
+%    \includegraphics[width=0.4\textwidth]{./example_knn3.png}
+%  \end{minipage}
+  \begin{center}
+%    \centering
+    \begin{minipage}{0.45\columnwidth}
+      \centering
+      \includegraphics[width=\columnwidth]{./rep_pic/example_knn3.png}
+    \end{minipage}
+    \begin{minipage}{0.45\columnwidth}
+      \centering
+      \includegraphics[width=\columnwidth]{./rep_pic/example_knn2.png}
+    \end{minipage}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{kNN法}
+  近傍の点をk個取ってくる \\
+  今回は\structure{ユークリッド距離}
+  \begin{equation}
+    l_{p2p1} = \sqrt{\left( \structure{p2_{x} - p1_{x}} \right)^{2} + \left( \alert{p2_{y} - p1_{y}} \right)^{2}}
+  \end{equation}
+  \begin{figure}
+    %\includegraphics[width=0.6\paperwidth]{./example_euclidian.png}
+    \includegraphics[width=0.6\paperwidth]{./rep_pic/example_euclidian.png}
+  \end{figure}
+\end{frame}
+
+\begin{frame}
+  \frametitle{kNN法}
+  近傍の点をk個取ってくる \\
+  これができれば，あとは多数決を取るのみ \\
+  Code - Python
+  \begin{figure}
+    \includegraphics[width=0.6\paperwidth]{./rep_pic/rep_getNeighbor.png}
+  \end{figure}
+\end{frame}
+
+\begin{frame}
+  \frametitle{kNN法}
+  結果(k = 3, 5)
+  \begin{center}
+  \begin{table}
+    \begin{tabular}{ c r } \toprule
+      kの数 & 正答率 \\ \midrule
+      3 & 77.32\% \\
+      5 & 79.97\% \\ \bottomrule
+    \end{tabular}
+  \end{table}
+  \end{center}
+\end{frame}
+
+\section{PCA}
+\begin{frame}
+  \frametitle{主成分分析(PCA)}
+  主成分分析とは
+  \begin{itemize}
+    \item 次元数の多いデータを，情報量ができるだけ多くなるようなかたちで次元数を落とす手法
+    \item 次元の圧縮によりデータ全体が小さくなるため，扱いやすくなるという利点
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{主成分分析(PCA)}
+   主成分分析のポイント
+   \begin{block}{固有値と標準偏差}
+     主成分（固有ベクトル，すなわち軸）ひとつにつき，ひとつ固有値がある．この固有値の平方根は標準偏差となる．
+     \begin{equation}
+       \sqrt{\lambda_{i}} = \sqrt{\frac{1}{n} \textstyle\sum_{k=1}^{n}\left(a_{k}-\mu\right)^2}
+     \end{equation}
+     ただし，\[ \mu = \frac{1}{n} \textstyle\sum_{k=1}^{n}a_{k} \]
+%      \begin{center}
+%        $ \mu = \frac{1}{n} \textstyle\sum_{k=1}^{n}a_{k} $
+%      \end{center}
+    \end{block}
+\end{frame}
+
+\begin{frame}
+  \frametitle{主成分分析(PCA)}
+   主成分分析のポイント \\
+   主成分（寄与率の高いもの上から2つ）
+   \begin{figure}
+     \centering
+     \begin{subfigure}{0.4\paperwidth}
+       \centering
+       \includegraphics[width=\columnwidth]{./rep_pic/EigenVector000.png}
+       \caption{第一主成分(寄与率9.7\%)}
+     \end{subfigure}
+     \begin{subfigure}{0.4\paperwidth}
+       \centering
+       \includegraphics[width=\columnwidth]{./rep_pic/EigenVector001.png}
+       \caption{第二主成分(寄与率7.1\%)}
+     \end{subfigure}
+%     \begin{subfigure}{0.3\paperwidth}
+%       \centering
+%       \includegraphics[width=\columnwidth]{./rep_pic/EigenVector001.png}
+%       \caption{第二主成分(寄与率7.1\%)}
+%     \end{subfigure}
+   \end{figure}
+
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{主成分分析(PCA)}
+   主成分分析のポイント
+   \begin{block}{寄与率}
+     全体の固有値に対するひとつの固有値の大きさ \\
+     すなわち，全体の情報量に対して主成分ひとつが占める割合
+     \begin{equation}
+       r_{i} = \frac{\lambda_{i}}{ \textstyle\sum_{k=1}^{n}\lambda_{k}}
+     \end{equation}
+   \end{block}
+   \begin{block}{累積寄与率}
+     全体の固有値に対するm番目までの固有値の大きさの和 \\
+     とった主成分がカバーできている情報量 $\left(m \le n\right)$
+     \begin{equation}
+       r_{i} = \frac{\lambda_{1}+\lambda_{2}+\cdots+\lambda_{m}}{ \lambda_{1}+\lambda_{2}+\cdots+\lambda_{n}}
+     \end{equation}
+   \end{block}
+\end{frame}
+
+\begin{frame}
+  \frametitle{主成分分析(PCA)}
+  全体の情報量のうち90\%くらいを保持しておきたい \\
+  $ \Rightarrow $ 主成分およそ100個 \\
+  50個ほどでも80\%に至っている
+  \begin{figure}
+    \centering
+       \includegraphics[width=\columnwidth]{./rep_pic/cumsum_explained_D100.png}
+       \caption{累積寄与率91\%}
+  \end{figure}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{PCA + kNN法}
+  結果(k = 3, 5)
+%  \begin{center}
+%  \begin{table}
+%    \begin{tabular}{ c r } \toprule
+%      %kの数 & 正答率 & 経過時間 \\ \midrule
+%      kの数 & 正答率  \\ \midrule
+%      3 & 92.53\% \\
+%      5 & 92.85\% \\
+%      11 & \\ \bottomrule
+%    \end{tabular}
+%  \end{table}
+%  \end{center}
+  \begin{table}
+    \centering
+    \begin{minipage}{0.3\columnwidth}
+      \caption{次元D= \structure{10}}
+      \centering
+      \begin{tabular}{c r } \toprule
+      kの数 & 正答率  \\ \midrule
+      3 & 92.53\% \\
+      5 & 92.85\% \\ \bottomrule
+      \end{tabular}
+    \end{minipage}
+    \begin{minipage}{0.3\columnwidth}
+      \caption{次元D= \structure{50}}
+      \centering
+      \begin{tabular}{c r } \toprule
+      kの数 & 正答率  \\ \midrule
+      3 & 97.57\% \\
+      5 & 97.53\% \\ \bottomrule
+      \end{tabular}
+    \end{minipage}
+    \begin{minipage}{0.3\columnwidth}
+      \caption{次元D= \structure{100}}
+      \centering
+      \begin{tabular}{c r } \toprule
+      kの数 & 正答率  \\ \midrule
+      3 & 97.36\% \\
+      5 & 97.38\% \\ \bottomrule
+      \end{tabular}
+    \end{minipage}
+  \end{table}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{まとめ}
+  \begin{itemize}
+    \item 主成分分析を掛けた後の方が正答率が上がった．
+    \item 近傍点の個数は多ければ良いというわけではない．
+  \end{itemize}
+\end{frame}
+
+\appendix
+\backupbegin
+
+\begin{frame}
+  \begin{center}
+    \Huge Appendixes
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Usage of Programs}
+  \begin{enumerate}
+    \item 実行するディレクトリ(/a とする)に全てのプログラムを置く．
+    \item 現在のディレクトリ配下にdataディレクトリを作成する(/a/data)．
+    \item dataディレクトリの中にMNISTの圧縮ファイルを置き，解凍しておく．
+    \item convertBinary.pyは一度だけ実行する．
+    \item pcaMNIST.pyとkNN.pyの実行には引数が必要となる． \\
+    python pcaMNIST 100 $ \Leftarrow $ 主成分の個数を指定する \\
+    python kNN.py 5 100 $ \Leftarrow $ 第一引数は近傍点の数, 第二引数は主成分の個数
+    python kNN.py 5 0 $ \Leftarrow $ 第二引数に0を指定すると，主成分分析前のデータにkNNを行なう．
+  \end{enumerate}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{参考文献}
+  \begin{thebibliography}{9}
+    \bibitem{pca_start}
+    統計学研究所 www.statistics.co.jp/reference/software\_R/statR\_9\_principal.pdf
+    \bibitem{knn}
+    http://machinelearningmastery.com/tutorial-to-implement-k-nearest-neighbors-in-python-from-scratch/
+  \end{thebibliography}
+\end{frame}
+
+\backupend
+\end{document}
