@@ -1,0 +1,93 @@
+\documentclass[10pt, a4paper]{jsarticle}
+\usepackage[dvipdfmx, hiresbb]{graphicx} %Bring Images[Driver, Exactly]
+\usepackage{here}
+\usepackage{comment}
+\usepackage{array, booktabs} %Setting for Table
+\usepackage{float} %Locating Figure and Table
+\usepackage[top=20truemm, bottom=25truemm, left=15truemm, right=15truemm]{geometry} %Setting Page Balance
+\usepackage{listings} %For Showing Source Code
+\usepackage{xcolor} %Using Color ->Source Code
+\renewcommand{\lstlistingname}{ソースコード} %Caption for Soure Code
+\lstset{
+	language= C,
+	numbers= left,		numbersep= 10pt,		numberstyle= \ttfamily,
+	breaklines= ture,	breakindent= 20pt,
+	frame= shadowbox,	framesep= 3pt,	rulesep= 4pt,
+	stepnumber= 1,
+	backgroundcolor= \color{white},
+	rulesepcolor= \color{cyan},
+	basicstyle= \ttfamily, columns= [1][fullflexible],
+	tabsize= 4,
+	label= }
+%End of Priamble
+
+
+\begin{document}
+\tableofcontents %Making Table of Contents
+\newpage
+
+\section{基本の生活}
+\subsection{wake up early}
+
+
+\section{使用器具等}
+\section{実験}
+\section{結果}
+\section{考察}
+\section{結論}
+\section{参考文献}
+
+\end{document}
+
+
+\begin{comment}
+	これは，プログラムの \ref{bobobobo}
+\lstinputlisting[caption= ぼぼぼぼ, label= bobobobo]{dotTorF.txt}
+	\title{report}
+	\author{J114081 辻祥太}
+	\data{}
+	\maketitle
+	\newpage
+
+	\tableofcontents %Making Table of Contents
+	\newpage
+
+	\begin{itemize}
+	\item
+	\end{itemize}
+
+	\begin{table}[H]
+	\caption{•}
+	\label{table:}
+	\begin{center}
+	\begin{tabular}{lrr}
+	&&
+	\end{tabular}
+	\end{center}
+	\end{table}
+
+	\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=cm]{.png}
+	\caption{}
+	\label{fig:}
+	\end{center}
+	\end{figure}
+
+	\begin{figure}[H]
+	\begin{minipage}{0.5\columnwidth}
+		\begin{center}
+		\includegraphics[width=\columnwidth]{.png}
+		\caption\fi{•}
+		\label{•}
+		\end{center}
+	\end{minipage}
+	\begin{minipage}{0.5\columnwidth}
+		\begin{center}
+		\includegraphics[width=\columnwidth]{.png}
+		\caption{•}
+		\label{•}
+		\end{center}
+	\end{minipage}
+	\end{figure}
+\end{comment}

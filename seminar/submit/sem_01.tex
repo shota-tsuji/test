@@ -1,0 +1,265 @@
+\documentclass[dvipdfmx]{beamer}
+\usepackage{etex}
+%\documentclass[dvipdfmx,usenames]{beamer}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{listings}
+\usetheme{Madrid}
+\useinnertheme{circles}
+\useoutertheme{default}
+%\usepackage{beamerthemeshadow}
+\usepackage{tikz}
+\usepackage[varg]{txfonts}
+\usepackage{booktabs}
+\renewcommand{\kanjifamilydefault}{\gtdefault}
+\setbeamercovered{transparent}
+\setbeamertemplate{navigation symbols}{}
+\everymath{\displaystyle}
+\AtBeginSection[]
+{\begin{frame}{発表の流れ}
+	\begin{multicols}{2}[]
+  \tableofcontents[currentsection]
+	\end{multicols}
+\end{frame}}
+%ページ番号の表示
+%\setbeamertemplate{footline}[frame number]
+\usepackage{hyperref}
+%しおりをつくるsectionの深さや，目次のリンクの色などを指定
+%\usepackage[bookmarksopenlevel=2]{hyperref}
+\usepackage{pxjahyper}
+%amsmathとhyperrefとの互換性
+\usepackage{amsmath}
+\let\equation\gather
+\let\endequation\endgather
+
+\setbeamertemplate{enumerate item}[circle]
+
+\newcommand{\backupbegin}{
+  \newcounter{framenumberappendix}
+  \setcounter{framenumberappendix}{\value{framenumber}}
+}
+\newcommand{\backupend}{
+  \addtocounter{framenumberappendix}{-\value{framenumber}}
+  \addtocounter{framenumber}{\value{framenumberappendix}}
+}
+
+\lstset{
+	language= C,
+	numbers=left,		numbersep= 10pt,		numberstyle= \ttfamily,
+	breaklines=ture,	breakindent= 20pt,
+	frame= shadowbox,	framesep= 3pt,	rulesep= 4pt,
+	stepnumber= 1,
+	backgroundcolor= \color{white},
+	rulesepcolor= \color{cyan},
+	basicstyle= \ttfamily, %columns= [1][fullflexible],
+	tabsize=2,
+	label= %
+}
+
+\usepackage{subcaption}
+\usepackage{multicol}
+\usepackage{lmodern}
+\usepackage{advdate}
+
+\title[Seminar 2nd]{Seminar02 行列行列積DGEMMの計算}
+\institute{Kogakuin University}
+\author[Shota Tsuji]{情報学部コンピュータ科 j114081\\ 辻　祥太}
+\date{\AdvanceDate[1]\today}
+
+
+\begin{document}
+\section*{はじめ}
+\begin{frame}
+  \titlepage \end{frame} 
+\begin{frame}[plain]
+  \frametitle{Contents}
+  \tableofcontents
+\end{frame}
+
+\begin{frame}
+  \frametitle{Contents}
+	%\begin{multicols}{2}[]
+  \begin{itemize}
+    \item 行列行列積の計算
+    \item 実測性能の確認
+  \end{itemize}
+	%\end{multicols}
+\end{frame}
+
+\section{行列行列積の計算}
+\begin{frame}
+  \frametitle{課題の指定}
+  指定された条件
+  \begin{enumerate}
+		\item N*Nの正方行列の積(100<=N<=1000)
+		\item 演算時間を計算
+  \end{enumerate}
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{実行環境}
+	\begin{columns}
+	\begin{column}{0.48\textwidth}
+	\begin{itemize}
+		\item Aluminium計算機(Intel Xeon X5570)\\
+		\item Flequ 2.93GHz\\ \bottomrule
+		\item コアは1個のみ使用
+		\item コンパイルコマンド\\ gcc -fopenmp sem\_mat\_mat.c -lm
+	\end{itemize}
+	\end{column}
+
+	\begin{column}{0.48\textwidth}
+	\end{column}
+	\end{columns}
+
+
+%	\begin{multicols}{2}[]
+%	\begin{itemize}
+%		\item コンパイルコマンド\\ gcc -fopenmp sem\_mat\_mat.c -lm
+%	\end{itemize}
+%
+%	\begin{figure}
+%		\includegraphics[width=0.5\paperwidth, natwidth=1010,natheight=1040]{./800px-Intel_Nehalem_arch.svg.png}
+%	\end{figure}
+%	\end{multicols}
+\end{frame}
+
+\section{性能値の計算}
+\begin{frame}
+  \frametitle{性能値の計算}
+	\begin{block}{理論性能値}
+	\begin{equation*}
+		%(\mbox{性能値GFlops}) = (\mbox{1Clockあたりの演算回数}) * (\mbox{Frequency}) * (\mbox{コア数}) \\
+		(GFlops) = (FLOPS/Clock) * (Frequency) * (Num\_Cores)
+  \end{equation*}
+	\end{block}
+
+	\begin{block}{実測性能値}
+	\begin{center}
+  \begin{equation*}
+		(\mbox{GFlops}) = \frac{(\mbox{計算1回あたりの演算回数})*(\mbox{計算回数})}{(\mbox{全体で掛かった時間)*($10^9$)}}
+  \end{equation*}
+	\end{center}
+	\end{block}
+	Flopsは，Flop/secの略
+\end{frame}
+
+
+%\begin{frame}
+ % \frametitle{使用した計算機の特徴と実行環境}
+ % \begin{columns}
+ % \begin{column}{0.48\textwidth}
+ % \begin{itemize}
+ % 		\item コンパイル\\ gcc -fopenmp sem\_mat\_mat.c -lm
+ % 		\item コアは1個のみ使用
+ % \end{itemize}
+ % \end{column}
+
+ % \begin{column}{0.48\textwidth}
+ % \begin{table}
+ %   \caption{Aluminium計算機}
+ % 	\centering
+ %   \begin{tabular}{ c | r } \toprule
+ % 		特徴 & 内容\\ \midrule
+ %     種類 & Intel Xeon X5570\\
+ %     コア数 & 2コアまで\\
+ % 		周波数 & 2.93GHz\\ \bottomrule
+ %   \end{tabular}
+ % \end{table}
+ % \end{column}
+ % \end{columns}
+%\end{frame}
+
+
+\begin{frame}
+  \frametitle{性能値の計算}
+  \begin{equation*}
+		(\mbox{性能値GFlops}) = (\mbox{1Clockあたりの演算回数}) * (\mbox{Frequency}) * (\mbox{コア数})
+  \end{equation*}
+	\begin{equation*}
+		2 * 2.93 * 1 = 5.86GFlops
+  \end{equation*}
+
+\end{frame}
+
+\begin{frame}
+	\frametitle{性能値の計算}
+	実測性能値
+	\begin{figure}
+		\includegraphics[width=0.6\paperwidth]{./sem_MatMatProduct.png}
+  \end{figure}
+\end{frame}
+
+\begin{frame}
+	\frametitle{実行方法}
+	\lstinputlisting[caption=disp1, label=ターミナル上での実行方法]{./do.txt}
+\end{frame}
+
+\begin{frame}
+	\frametitle{結果}
+	figure 2ko
+	説明いれる
+	性能値さがる
+\end{frame}
+
+\begin{frame}
+	\frametitle{考察}
+	性能値全然でていない数%
+\end{frame}
+
+% Codeのサイズを小さめにする
+% 式の番号表示しない
+% 1次元配列にしたときの計算
+% サイズ/timeの結果
+% 理論性能との比較
+% コンパイルオプションつき
+% Adressen あドレッセん
+% よこせん（スライド一枚を分割）
+\appendix
+\backupbegin
+
+\begin{frame}
+  \begin{center}
+    \Huge Appendixes
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{使用した計算機の特徴と実行環境}
+	\begin{columns}
+	\begin{column}{0.48\textwidth}
+	\begin{itemize}
+			\item コンパイル\\ gcc -fopenmp sem\_mat\_mat.c -lm
+			\item コアは1個のみ使用
+	\end{itemize}
+	\end{column}
+
+	\begin{column}{0.48\textwidth}
+  \begin{table}
+    \caption{Aluminium計算機}
+		\centering
+    \begin{tabular}{ c | r } \toprule
+			特徴 & 内容\\ \midrule
+      種類 & Intel Xeon X5570\\
+      コア数 & 2コアまで\\
+			周波数 & 2.93GHz\\ \bottomrule
+    \end{tabular}
+  \end{table}
+	\end{column}
+	\end{columns}
+\end{frame}
+
+
+\begin{frame}
+%  \frametitle{参考文献}
+%  \begin{thebibliography}{9}
+%    \bibitem{pca_start}
+%    統計学研究所 www.statistics.co.jp/reference/software\_R/statR\_9\_principal.pdf
+%    \bibitem{knn}
+%    http://machinelearningmastery.com/tutorial-to-implement-k-nearest-neighbors-in-python-from-scratch/
+%  \end{thebibliography}
+\end{frame}
+
+\backupend
+\end{document}

@@ -1,0 +1,2 @@
+$ gcc -fopenmp ./sem_mat_mat.c -lm 
+$ ./prac_sequence.sh

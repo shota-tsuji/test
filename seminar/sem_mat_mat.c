@@ -8,8 +8,17 @@ void fill_matrix(double **matrix, int n)
 	int i, j, val = 1;
 	for(i=0; i<n; ++i){
 		for(j=0; j<n; ++j){
-			matrix[i][j] = val;
-			val += 1;
+			matrix[i][j] = (double)rand() / RAND_MAX*2.0 -1.0;
+		}
+	}
+}
+
+void fill_zero_matrix(double **matrix, int n)
+{
+	int i, j;
+	for(i=0; i<n; ++i){
+		for(j=0; j<n; ++j){
+			matrix[i][j] = 0.0;
 		}
 	}
 }
@@ -35,6 +44,15 @@ void inner_malloc(double **matrix, int n)
 	}
 }
 
+void iner_free(double **matrix, int n)
+{
+	int i=0;
+	for(i=0; i<n; ++i){
+		free(matrix[i]);
+	}
+}
+
+
 int main(int argc, char*argv[])
 {
 	
@@ -50,11 +68,10 @@ int main(int argc, char*argv[])
 	inner_malloc(A, n);
 	inner_malloc(B, n);
 	inner_malloc(C, n);
-
+	
+	srand(0);
 	fill_matrix(A, n);
 	fill_matrix(B, n);
-	//print_matrix(A, n);
-	//print_matrix(B, n);
 	
 	do{
 		time = omp_get_wtime();
@@ -70,29 +87,23 @@ int main(int argc, char*argv[])
 		whole_time += time;
 		count +=1;
 		//printf("time: %f\n", time);
+		fill_zero_matrix(C, n);
 	}while(whole_time < 1.0);
 
-	// 足し算は，ひとつの箱に他仕入れているので，(N-1)の-1はなくなる
-	double num_cluc = (2.0 * pow(n, 3)) - pow(n, 2);
-	double gflop = num_cluc * count / ( pow(10.0, 9) *  whole_time);
-	//printf("size, time, gflop\n");
-	printf("%d,%f,%f\n", n, whole_time/count, gflop);
-	//printf("size, total_time, count, gflop\n");
-	//printf("%d, %f, %d, %f\n", n, whole_time/count, count, gflop);
+	// 足し算は，ひとつの箱に足し入れているので，(N-1)の-1はなくなる
+	//double num_cluc = (2.0 * pow(n, 3)) - pow(n, 2);
+	double num_cluc = 2.0 * pow(n, 3);
+	double gflops = num_cluc * count / ( pow(10.0, 9) *  whole_time);
+	//printf("size, time, gflops\n");
+	printf("%d,%f,%f\n", n, whole_time/count, gflops);
+	//printf("size, total_time, count, gflops\n");
+	//printf("%d, %f, %d, %f\n", n, whole_time/count, count, gflops);
 
-	for(i=0; i<n; ++i){
-		free(A[i]);
-	}
+	iner_free(A, n);
 	free(A);
-
-	for(i=0; i<n; ++i){
-		free(B[i]);
-	}
+	iner_free(B, n);
 	free(B);
-	
-	for(i=0; i<n; ++i){
-		free(C[i]);
-	}
+	iner_free(C, n);
 	free(C);
 
 	return 0;

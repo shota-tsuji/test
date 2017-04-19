@@ -1,0 +1,17 @@
+nodel name CPU X5570 @ 2.93GHz
+cpu MHz 1596.000 (times for transfering)
+cache size 8192KB
+cpu cores 4
+cache alignment 64
+
+PCの演算能力
+GHz->2.93
+?積と和が同時に行える．-> *2
+
+result = FLOPS/Clock * GHz * cores
+?FLOPS/Clock
+2.93GHz
+1Core
+
+
+*2の計算は，コンピュータが積の計算と和の計算を同時に行えることに由来する．

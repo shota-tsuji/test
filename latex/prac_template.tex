@@ -1,0 +1,124 @@
+\documentclass[dvipdfmx]{beamer}
+%\documentclass[dvipdfmx,usenames]{beamer}
+\usepackage{graphicx}
+\usepackage{color}
+\usetheme{Warsaw}
+\usepackage{beamerthemeshadow}
+\usepackage{tikz}
+\usepackage[varg]{txfonts}
+\usepackage{booktabs}
+\renewcommand{\kanjifamilydefault}{\gtdefault}
+% 隠しているアイテムを半透明で表示
+\setbeamercovered{transparent}
+% ナビゲーションの非表示
+\setbeamertemplate{navigation symbols}{}
+\everymath{\displaystyle}
+%各節の始まりで発表の流れを示す
+\AtBeginSection[]
+{\begin{frame}{発表の流れ}
+  \tableofcontents[currentsection]
+\end{frame}}
+%ページ番号の表示
+\setbeamertemplate{footline}[frame number]
+% しおりをつくる
+\usepackage{hyperref}
+%しおりをつくるsectionの深さや，目次のリンクの色などを指定
+%\usepackage[usenames]{color}
+%\usepackage[bookmarksopenlevel=2]{hyperref}
+%しおりを日本語対応にする
+\usepackage{pxjahyper}
+%amsmathとhyperrefとの互換性
+\usepackage{amsmath}
+\let\equation\gather
+\let\endequation\endgather
+
+%\setbeamertemplate{headline}{%
+%\leavevmode%
+%  \hbox{%
+%    \begin{beamercolorbox}[wd=\paperwidth,ht=2.5ex,dp=1.125ex]{palette quaternary}
+%      \insertsectionnavigationhorizontal{\paperwidth}{}{\hskip0pt plus1filll}
+%    \end{beamercolorbox}
+%  }
+%}
+
+\setbeamertemplate{enumerate item}[circle]
+
+%ページ数カウント
+\newcommand{\backupbegin}{
+  \newcounter{framenumberappendix}
+  \setcounter{framenumberappendix}{\value{framenumber}}
+}
+\newcommand{\backupend}{
+  \addtocounter{framenumberappendix}{-\value{framenumber}}
+  \addtocounter{framenumber}{\value{framenumberappendix}}
+}
+
+%\usepackage{emath}
+%\usepackage{emathMw}
+\usepackage{subcaption}
+
+\title{情報学セミナー}
+\institute{工学院大学}
+\author{情報学部コンピュータ科}
+\date{}
+
+\begin{document}
+
+\section*{はじめ}
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}[plain]
+  \frametitle{発表内容}
+  \tableofcontents
+\end{frame}
+
+\section{GPSモジュール}
+\begin{frame}
+  \frametitle{GPSモジュール}
+  やりたいこと
+  \begin{itemize}
+    \item GPSモジュールから緯度・経度を取得
+    \item 目的地の緯度・経度を設定
+    \item 目的地付近になるとバイブレーションで知らせる
+  \end{itemize}
+\end{frame}
+
+\section{できなかったこと}
+\begin{frame}
+  \frametitle{GPSモジュール}
+  \alert{緯度・経度が取得できなかった} \\
+  衛星をとらえられない $ \cdots  \Rightarrow $ GPSアンテナが問題
+  また今のところ，\structure{windows}で確認してみると，データ取得失敗のエラー \\
+  LInuxでは，確認できていない
+\end{frame}
+
+\appendix
+\backupbegin
+
+\begin{frame}
+  \begin{center}
+    \Huge Appendixes
+  \end{center}
+\end{frame}
+
+\section*{できたこと}
+\begin{frame}
+  \frametitle{GPSモジュール}
+  できたこと
+  \begin{itemize}
+    \item XYZ方向の特定
+    \item 加速度
+  \end{itemize}
+\end{frame}
+
+\section*{デモンストレーション}
+\begin{frame}
+  \frametitle{GPSモジュール}
+  デモンストレーション
+\end{frame}
+\backupend
+
+
+\end{document}

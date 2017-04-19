@@ -1,6 +1,6 @@
 #!/bin/sh
 start=100
-step=100
+step=50
 end=1000
 file="result.csv"
 if [ -e ${file} ]

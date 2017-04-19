@@ -26,3 +26,9 @@ test/
 
 # Adding Mar/28/2017
 *.pdf
+
+# Adding Apr/18/2017
+*.csv
+*.png
+*.jpeg
+*.xbb
