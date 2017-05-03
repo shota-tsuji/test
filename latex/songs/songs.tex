@@ -1,0 +1,130 @@
+\documentclass[11pt, a4paper]{jsarticle}
+\usepackage[dvipdfmx, hiresbb]{graphicx} %Bring Images[Driver, Exactly]
+\usepackage{here}
+\usepackage{comment}
+\usepackage{array, booktabs} %Setting for Table
+\usepackage{float} %Locating Figure and Table
+\usepackage[top=20truemm, bottom=25truemm, left=15truemm, right=15truemm]{geometry} %Setting Page Balance
+\usepackage{listings} %For Showing Source Code
+\usepackage{xcolor} %Using Color ->Source Code
+\renewcommand{\lstlistingname}{ソースコード} %Caption for Soure Code
+\lstset{
+	language= C,
+	numbers= left,		numbersep= 10pt,		numberstyle= \ttfamily,
+	breaklines= ture,	breakindent= 20pt,
+	frame= shadowbox,	framesep= 3pt,	rulesep= 4pt,
+	stepnumber= 1,
+	backgroundcolor= \color{white},
+	rulesepcolor= \color{cyan},
+	basicstyle= \ttfamily, columns= [1][fullflexible],
+	tabsize= 4,
+	label= }
+\usepackage{ascmac}
+\setlength{\textwidth}{\fullwidth}
+\setlength{\textheight}{39\baselineskip}
+
+
+\begin{document}
+\tableofcontents %Making Table of Contents
+\newpage
+
+\section{気になった歌}
+\begin{itembox}[r]{とりあえず}
+	Love Love Love(album version) Tristan Prettyman\\
+	Love Song Sara Bareilles\\
+	探し物 Dirty Old Men\\
+	Here I Go Sam Ock\\
+\end{itembox}
+
+\begin{itembox}[r]{よさそうな歌}
+	Go!Go!7188 こいのうた
+\end{itembox}
+
+\begin{itembox}[r]{Apr/15}
+	歯医者さんに行った．\\
+	調布駅まで走った．\\
+	壁に掛かっている上着を棚の中にしまった．
+\end{itembox}
+
+\begin{itembox}[r]{Apr/16}
+	randomの使い方を復習した．\\
+	海外のR18の動画を初めて見た．\\
+	いなげやから多摩川方面まで走った．\\
+	6時間(連続)睡眠チャレンジをスタートさせた．(1日目)
+\end{itembox}
+
+\begin{itembox}[r]{Apr/17}
+	HPC研究会に参加した．\\
+	東大柏キャンパスまで行ってきた．\\
+	Seminar発表スライドを急いで作った．(寝る時間遅くなった)
+\end{itembox}
+
+\begin{itembox}[r]{Apr/18}
+	ひたすらスライドを作った．\\
+	LaTexのコンパイル通らなくて，間に合わなかった．(提出遅れた)\\
+	shscriptも，指定正しくできているか怪しかった．
+\end{itembox}
+
+\begin{itembox}[r]{Apr/19}
+	Seminar発表した．\\
+	文字サイズの改善をはかる必要があった．\\
+	行列行列積において，ブロック化を試してみた．
+\end{itembox}
+
+\begin{itembox}[r]{Apr/20}
+	行列ベクトル積を，mpiを使って計算した．\\
+	対称行列の固有値について少し知った．(あいまい)\\
+	春・夏服を見に行った．
+\end{itembox}
+
+
+\end{document}
+
+
+\begin{comment}
+	これは，プログラムの \ref{bobobobo}
+\lstinputlisting[caption= ぼぼぼぼ, label= bobobobo]{dotTorF.txt}
+	\title{report}
+	\author{J114081 辻祥太}
+	\data{}
+	\maketitle
+	\newpage
+
+	\tableofcontents %Making Table of Contents
+	\newpage
+
+	\begin{table}[H]
+	\caption{•}
+	\label{table:}
+	\begin{center}
+	\begin{tabular}{lrr}
+	&&
+	\end{tabular}
+	\end{center}
+	\end{table}
+
+	\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=cm]{.png}
+	\caption{}
+	\label{fig:}
+	\end{center}
+	\end{figure}
+
+	\begin{figure}[H]
+	\begin{minipage}{0.5\columnwidth}
+		\begin{center}
+		\includegraphics[width=\columnwidth]{.png}
+		\caption\fi{•}
+		\label{•}
+		\end{center}
+	\end{minipage}
+	\begin{minipage}{0.5\columnwidth}
+		\begin{center}
+		\includegraphics[width=\columnwidth]{.png}
+		\caption{•}
+		\label{•}
+		\end{center}
+	\end{minipage}
+	\end{figure}
+\end{comment}

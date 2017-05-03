@@ -1,0 +1,196 @@
+\documentclass[11pt, a4paper]{jsarticle}
+\usepackage[dvipdfmx, hiresbb]{graphicx} %Bring Images[Driver, Exactly]
+\usepackage{here}
+\usepackage{comment}
+\usepackage{array, booktabs} %Setting for Table
+\usepackage{float} %Locating Figure and Table
+\usepackage[top=20truemm, bottom=25truemm, left=15truemm, right=15truemm]{geometry} %Setting Page Balance
+\usepackage{listings} %For Showing Source Code
+\usepackage{xcolor} %Using Color ->Source Code
+\renewcommand{\lstlistingname}{ソースコード} %Caption for Soure Code
+\lstset{
+	language= C,
+	numbers= left,		numbersep= 10pt,		numberstyle= \ttfamily,
+	breaklines= ture,	breakindent= 20pt,
+	frame= shadowbox,	framesep= 3pt,	rulesep= 4pt,
+	stepnumber= 1,
+	backgroundcolor= \color{white},
+	rulesepcolor= \color{cyan},
+	basicstyle= \ttfamily, columns= [1][fullflexible],
+	tabsize= 4,
+	label= }
+\usepackage{ascmac}
+%\usepackage{latexsym}
+\setlength{\textwidth}{\fullwidth}
+\setlength{\textheight}{39\baselineskip}
+
+
+\begin{document}
+\tableofcontents %Making Table of Contents
+\newpage
+
+\section{April/2017}
+\begin{itembox}[r]{Apr/13}
+	pythonでGFlopsの描画をした
+\end{itembox}
+
+\begin{itembox}[r]{Apr/14}
+	Seminar発表スライドを作成した．\\
+	つつじの駅のまわりを探索した．\\
+	Nehalemのアーキテクチャを少し見た．\\
+	国領駅まで走った．
+\end{itembox}
+
+\begin{itembox}[r]{Apr/15}
+	歯医者さんに行った．\\
+	調布駅まで走った．\\
+	壁に掛かっている上着を棚の中にしまった．
+\end{itembox}
+
+\begin{itembox}[r]{Apr/16}
+	randomの使い方を復習した．\\
+	海外のR18の動画を初めて見た．\\
+	いなげやから多摩川方面まで走った．\\
+	6時間(連続)睡眠チャレンジをスタートさせた．(1日目)
+\end{itembox}
+
+\begin{itembox}[r]{Apr/17}
+	HPC研究会に参加した．\\
+	東大柏キャンパスまで行ってきた．\\
+	Seminar発表スライドを急いで作った．(寝る時間遅くなった)
+\end{itembox}
+
+\begin{itembox}[r]{Apr/18}
+	ひたすらスライドを作った．\\
+	LaTexのコンパイル通らなくて，間に合わなかった．(提出遅れた)\\
+	shscriptも，指定正しくできているか怪しかった．
+\end{itembox}
+
+\begin{itembox}[r]{Apr/19}
+	Seminar発表した．\\
+	文字サイズの改善をはかる必要があった．\\
+	行列行列積において，ブロック化を試してみた．
+\end{itembox}
+
+\begin{itembox}[r]{Apr/20}
+	行列ベクトル積を，mpiを使って計算した．\\
+	対称行列の固有値について少し知った．(あいまい)\\
+	春・夏服を見に行った．
+\end{itembox}
+
+\begin{itembox}[r]{Apr/21}
+	お昼くらいからあまり頭が回らなかった．お昼ごはん食べ過ぎたかもしれない．\\
+	春物の服を見に行った．しかし，あまりピンとくるものが見つけられなかった．
+\end{itembox}
+
+\begin{itembox}[r]{Apr/22}
+	掃除機を久しぶりに掛けた．\\
+	ためていた本を，縛って捨てられた．\\
+	歯医者さんに行った．\\
+	高野さんが寮に遊びにきた．\\
+	長岡の花火はおすすめらしい．
+\end{itembox}
+
+\begin{itembox}[r]{Apr/23}
+	自転車を修理にだした．パンクを直してもらった．\\
+\end{itembox}
+
+\begin{itembox}[r]{Apr/24}
+	行列行列積について，ブロック化・ループ交換と，転置を試せた．\\
+	菱沼さんは，論文を書いた内容について，「自分のものにしていた」らしい．\\
+\end{itembox}
+
+\begin{itembox}[r]{Apr/25}
+	ヘネパタ輪公開で，PC相対というものを知った．\\
+	ゼミのためのスライドの作成が間に合わなかった．原因は，土日に全く取り組まなかったことであろう．
+\end{itembox}
+
+\begin{itembox}[r]{Apr/26}
+	Graphのプログラミングコンテスト初級問題を解いた．\\
+	藤井先生と，大学院(つくば)について\&野村先輩の研究コードについて\&講習会についてお話をした．
+\end{itembox}
+
+\begin{itembox}[r]{May/1}
+輪講会でりょうくんと一緒に説明した．\\
+SA-AMG法について知るために，反復解法部ではどのような手法を用いているのか確認した．
+\end{itembox}
+
+\begin{itembox}[r]{May/2}
+午前中は，ヤコビ法とガウス・ザイデル法について，行列とベクトルの観点から理解した．\\
+研究室に人が来ると，集中力がなくなることが分かった．\\
+図書館が開いていない日は，用事がなければ学校に来る必要はなさそうであると考えた．
+\end{itembox}
+
+\begin{itembox}[r]{Mar/3}
+CG法について，行列とベクトルの観点から理解した．\\
+自転車で多摩川まで行った．清々しかった．\\
+keyword:正定値対称行列
+\end{itembox}
+
+\section{column}
+\begin{itembox}[c]{数学と学び方について}
+	テキストは，分かる系より解ける系を選ぶ．最初は，コンパクトな本を使うと良い．これは，「理解は遅れてやってくる」ということによるものである．反復していくことで，頭を使わなくても解けるようになり，理解することの方により頭の資源の多くを割くことができる．\\
+薄い \textless 読み \textgreater を塗り重ねる．\\
+	挫折は， \textless 分からなくて苦しいから辞める \textgreater という流れからくるものである．とにかく最後まで行くことにする．最初は目次，その次は大見出しだけ最後まで読んで行く，といった感じである．その時点の自分の実力で分かるところだけ拾って読む．最初は，「どこなら分かりそうか」を探すだけでも良い．
+\end{itembox}
+
+\begin{itembox}[c]{LaTex tips}
+texファイルをvimで編集するときの設定\\
+自動インデントをしないようにする．$\rightarrow$ \textasciitilde/.vim/indent/tex.vimを以下のように記述して作成する.\\
+let b:did\_indent = 1
+\end{itembox}
+
+\end{document}
+
+
+\begin{comment}
+	これは，プログラムの \ref{bobobobo}
+\lstinputlisting[caption= ぼぼぼぼ, label= bobobobo]{dotTorF.txt}
+	\title{report}
+	\author{J114081 辻祥太}
+	\data{}
+	\maketitle
+	\newpage
+
+	\tableofcontents %Making Table of Contents
+	\newpage
+
+	\begin{itemize}
+	\item
+	\end{itemize}
+
+	\begin{table}[H]
+	\caption{•}
+	\label{table:}
+	\begin{center}
+	\begin{tabular}{lrr}
+	&&
+	\end{tabular}
+	\end{center}
+	\end{table}
+
+	\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=cm]{.png}
+	\caption{}
+	\label{fig:}
+	\end{center}
+	\end{figure}
+
+	\begin{figure}[H]
+	\begin{minipage}{0.5\columnwidth}
+		\begin{center}
+		\includegraphics[width=\columnwidth]{.png}
+		\caption\fi{•}
+		\label{•}
+		\end{center}
+	\end{minipage}
+	\begin{minipage}{0.5\columnwidth}
+		\begin{center}
+		\includegraphics[width=\columnwidth]{.png}
+		\caption{•}
+		\label{•}
+		\end{center}
+	\end{minipage}
+	\end{figure}
+\end{comment}

@@ -1,0 +1,8 @@
+C1. indentなくす
+2. end環境を自動で入れてくれるようにする
+C3. ハイライト
+\4. complete keyword of latex
+
+use:vimtex
+C:do:indentは，vimtexの方か，vimrcの方か
+\\によるindentはvimの方

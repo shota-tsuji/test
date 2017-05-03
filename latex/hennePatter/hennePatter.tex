@@ -1,0 +1,183 @@
+\documentclass[dvipdfmx]{beamer}
+\usepackage{etex}
+%\documentclass[dvipdfmx,usenames]{beamer}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{listings}
+\usetheme{Madrid}
+\useinnertheme{circles}
+\useoutertheme{default}
+%\usepackage{beamerthemeshadow}
+\usepackage{tikz}
+\usepackage[varg]{txfonts}
+\usepackage{booktabs}
+\usepackage{comment}
+\renewcommand{\kanjifamilydefault}{\gtdefault}
+\setbeamercovered{transparent}
+\setbeamertemplate{navigation symbols}{}
+\everymath{\displaystyle}
+\AtBeginSection[]
+{\begin{frame}{発表の流れ}
+	\begin{multicols}{2}[]
+  \tableofcontents[currentsection]
+	\end{multicols}
+\end{frame}}
+%ページ番号の表示
+%\setbeamertemplate{footline}[frame number]
+\usepackage{hyperref}
+%しおりをつくるsectionの深さや，目次のリンクの色などを指定
+%\usepackage[bookmarksopenlevel=2]{hyperref}
+\usepackage{pxjahyper}
+%amsmathとhyperrefとの互換性
+\usepackage{amsmath}
+\let\equation\gather
+\let\endequation\endgather
+
+\setbeamertemplate{enumerate item}[circle]
+
+\newcommand{\backupbegin}{
+  \newcounter{framenumberappendix}
+  \setcounter{framenumberappendix}{\value{framenumber}}
+}
+\newcommand{\backupend}{
+  \addtocounter{framenumberappendix}{-\value{framenumber}}
+  \addtocounter{framenumber}{\value{framenumberappendix}}
+}
+
+%\lstset{
+%	language= C,
+%	numbers=left,		numbersep= 10pt,		numberstyle= \ttfamily,
+%	breaklines=ture,	breakindent= 20pt,
+%	%frame= shadowbox,	
+%	framesep= 3pt,	rulesep= 4pt,
+%	stepnumber= 1,
+%	backgroundcolor= \color{white},
+%	rulesepcolor= \color{cyan},
+%	basicstyle= \ttfamily, %columns= [1][fullflexible],
+%	tabsize=2,
+%	label= %
+%}
+
+\lstdefinestyle{customc}{
+	belowcaptionskip=1\baselineskip,
+	breaklines=true,
+	frame=L,
+	xleftmargin=\parindent,
+	language=C,
+	showstringspaces=false,
+	%basicstyle=\footnotesize\ttfamily,
+	basicstyle=\tiny\ttfamily,
+	keywordstyle=\bfseries\color{green!40!black},
+	commentstyle=\itshape\color{purple!40!black},
+	identifierstyle=\color{blue},
+	stringstyle=\color{orange},
+	tabsize=2,
+}
+
+\lstdefinestyle{customasm}{
+	belowcaptionskip=1\baselineskip,
+	frame=L,
+	xleftmargin=\parindent,
+	language=[x86masm]Assembler,
+	basicstyle=\footnotesize\ttfamily,
+	commentstyle=\itshape\color{purple!40!black},
+}
+\lstset{escqpechar=@,style=customc}
+
+
+\usepackage{subcaption}
+\usepackage{multicol}
+\usepackage{lmodern}
+\usepackage{advdate}
+
+\title[輪講会]{Lecture 5. More on the SVD}
+\institute{Kogakuin University}
+\author[Shota Tsuji]{情報学部コンピュータ科 j114081 辻　祥太}
+%\date{\AdvanceDate[1]\today}
+\date{\today}
+
+
+\begin{document}
+%\section*{はじめ}
+\begin{frame}
+\endgather
+\end{frame}
+
+\begin{frame}
+\titlepage
+\end{frame} 
+%\begin{frame}[plain]
+%  \frametitle{Contents}
+%  \tableofcontents
+%\end{frame}
+
+
+\section{命令セットのエンコード}
+\begin{frame}
+\frametitle{命令セットのエンコードにおける3つの選択肢}
+\begin{itemize}
+\item 可変長 (多様なパターンに対応)
+\item 固定長 (デコードが容易)
+\item ハイブリッド (数種類の命令長)
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{命令セットのエンコード(固定長)}
+\end{frame}
+
+\begin{frame}
+\end{frame}%\begin{block}
+
+
+%\section{A.8 コンパイラの役割}
+\appendix
+\backupbegin
+
+
+\backupend
+\end{document}
+
+
+
+
+
+\begin{comment}
+2進法表現へのエンコードが与える影響
+?オペコードとアドレッシングモードの独立性とは
+?アドレス指示子 アドレッシングモードに対して，それぞれ識別番号を割り当てたもの
+?対極
+フィールド（レジスタとアドレッシングモードのためのフィールド）の図示
+命令セットのエンコードにおける3個の選択肢
+
+
+
+
+topic固定長
+縦に並んだ図
+サイズ統一
+?アドレッシングモードや演算が少ない場合に優れている
+
+/////////////////////////
+演算操作のエンコードとアドレッシングモードのエンコードの方法を決定する際には，アドレッシングモードの多様さ,オペコードとアドレッシングモードの独立性が関係してくる．アドレス指示子を割り当てる．
+?対極
+?独立性
+?単一の命令の中に，アドレッシングモードとレジスタフィールドが多数現れる．
+?平均命令サイズと平均プログラムサイズとの違い
+
+可変長の80x86のadd命令の説明
+IBMのCodePackという方式は，標準的な命令を圧縮して格納しておく．命令キャッシュ上では32ビットの命令に解凍される．
+?P514このため，それぞれのプログラムのために独自の異なるエンコードを施すことができる．
+
+?P515
+?アーキテクチャの選択は良くも悪くも，コンパイラが生成するコードの質やコンパイラの構成の複雑さに影響される．
+後続のステップが問題を扱う能力（どこまで最適化を行うか）について仮定を立てながら，処理を進める．これがフェーズ順序問題
+
+グラフ彩色問題
+?生存変数
+汎用レジスタの数16個以上と付加的な浮動小数点レジスタが利用できれば効率よく動作する 
+
+
+
+
+\end{comment}

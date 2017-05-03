@@ -1,0 +1,584 @@
+\documentclass[dvipdfmx]{beamer}
+\usepackage{docmute}
+\input{setting}
+
+\begin{document}
+	\begin{frame}{}
+		\titlepage
+	\end{frame}
+
+	\AtBeginSection[]
+	{
+	\begin{frame}{}
+		% \begin{multicols}{2}
+		% \tableofcontents[currentsection, currentsubsection, sectionstyle=show/hide, subsectionstyle=show/show/shaded] 
+			\tableofcontents[currentsection,currentsubsection,sectionstyle=show/shaded,subsectionstyle=show/shaded]
+		% \end{multicols}
+	\end{frame}
+	}
+
+	\begin{frame}{A7. 命令セットのエンコード}
+		\begin{itemize}
+			\item 命令に対する2進表現へのエンコードが与える影響
+				\begin{itemize}
+					\item コードサイズだけでない
+					\item プロセッサの実装(エンコードされた命令を解析する必要あり)
+				\end{itemize}
+			\item エンコードの仕方に影響するもの
+				\begin{itemize}
+					\item アドレッシングモードの多様さ
+					\item オペコードとアドレッシングモードの独立性(全ての命令に対して全てのアドレッシングモードが適用できること)
+				\end{itemize}
+			\item オペランドとアドレッシングモードの組み合わせが多い時\\
+				$\to$ アドレス指示子(アドレッシングモードに番号を付ける)
+			\item 2つまでのアドレッシングモードであれば，オペコードに組み込む
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{A7. 命令セットのエンコード}
+		\begin{itemize}
+			\item (レジスタ・アドレッシングモードの数) $\to$命令サイズに多大な影響
+			\item (アドレッシングモード・レジスタ)を指定するフィールドが命令の中に多数出現(図A-11 a)
+			\item ex レジスタアドレッシングモード $\to$ 0
+				\begin{itemize}
+					\item add | 0 | R4 | 0 | R3
+				\end{itemize}
+			\item ex インデックス修飾アドレッシングモード $\to$ 4
+				\begin{itemize}
+					\item add | 4 | R3 | 4 | R1 | 4 | R2
+				\end{itemize}
+			\item \highlight[red]{この解釈であっているか}．あっているとすれば，この表現は冗長ではないか
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{A7. 命令セットのエンコード}
+		\begin{itemize}
+			\item レジスタとアドレッシングモードが多い方が良い
+			\item しかし，指定するビット幅も大きくなるため，平均命令サイズと平均プログラムのサイズに影響が出る
+			\item バイトの倍数のような固定長命令の方がパイプライン化の面で良い(任意長だと，その命令に書いてある引数のサイズを見なければ，次の命令が開始がどこからか分からないため)
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{A7. 命令セットのエンコード}
+		\begin{itemize}
+			\item 可変長: 全ての演算操作が全てのアドレッシングモードを使える
+				\begin{itemize}
+					\item 多い場合には指示子を利用することで直接書かなくて済む
+				\end{itemize}
+			\item 固定長: オペコード内に演算操作とアドレッシングモードを記述
+				\begin{itemize}
+					\item 演算操作$\times$アドレッシングモードの数になる
+				\end{itemize}
+			\item トレードオフ:プログラムサイズ $\Leftrightarrow$ プロセッサのデコードの容易さ
+				
+			\item $\highlight[red]{1} + \highlight[blue]{1} + \highlight[green]{4} = 6$
+				\begin{itemize}
+					\item \highlight[red]{add命令のオペコード} $+$ \highlight[blue]{アドレス指示子} $+$ \highlight[green]{アドレスフィールド}
+					\item \highlight[blue]{アドレス指示子}: オペランドの指定も入る
+				\end{itemize}
+			\item 固定長の命令を複数容易するものをハイブリッド
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{RISCにおけるコードサイズの削減}
+		\begin{itemize}
+			\item 新しいRISC命令セットを考案
+				\begin{itemize}
+					\item 16ビットと32ビットの両方の命令を持つハイブリッド
+				\end{itemize}
+			\item IBM社のCodePackは標準な命令を圧縮
+				\begin{itemize}
+					\item ラングレス符号化($aaabb \to a3b2$)
+					\item \highlight[red]{プログラムのために独自の異なるエンコードを施すことができる？}
+				\end{itemize}
+			\item 日立のSuperHは16ビット固定長
+				\begin{itemize}
+					\item 少ない命令操作
+					\item 16本のレジスタ
+				\end{itemize}
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{A.8 他の章との関連: コンパイラの役割}
+		\begin{itemize}
+			\item 命令セットアーキテクチャのターゲット\\ \ \ \ $\to$ コンパイラが生成したもの\\ \ \ \ $\to$ ほとんどの命令がコンパイラが出力したものだから
+			\item アーキテクチャの選択はコンパイラと分けて考えられない
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{最近のコンパイラの構造}
+		\begin{itemize}
+			\item コンパイラ作成者の目標
+				\begin{itemize}
+					\item 正確さ
+					\item コンパイルされたコードの速度
+				\end{itemize}
+			\item 最適化は多数のフェーズで構成される
+			\item 可逆性を持たせることは現実的ではない
+			\item 仮定を立てながら進める(フェーズ順序問題)
+				\begin{itemize}
+					\item 例えば，どの続きをインライン化するのか
+					\item どれが最適化になるかを試して，その後に最適な展開は出来ない
+				\end{itemize}
+			\item 図A-12. フェーズで分離されているので，とっかえ可能
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{レジスタ割り付け}
+		\begin{itemize}
+			\item 変数を頂点，辺が式の評価で同時に必要とされるもの，色をレジスタ番号としてグラフ彩色法
+			\item グラフ彩色問題
+				\begin{itemize}
+					\item 最小の彩色数を求めるのはNP困難
+					\item 与えられたグラフが$k-$彩色可能かはNP完全
+					\item $\mathcal{O}(2.445^n)\ \ \ $Lawler, E.L. (1976), “A note on the complexity of the chromatic number problem”, Information Processing Letters 5 (3)
+					\item ヒューリスティックな線形アルゴリズムが存在
+				\end{itemize}
+			\item 整数変数の大域割り付けにおいては，汎用レジスタは16個, 付加的な浮動小数点レジスタが利用できれば非常に効率的
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{最適化が性能におよぼす影響}
+		表A-8
+		\begin{itemize}
+			\item fortranまたはPascalの12個のプログラムに最適化の適用
+			\item 全体の最適化回数に対する，最適化の内訳が書いてある
+			\item N.M.はnot measured
+		\end{itemize}
+		図A-13
+		\begin{itemize}
+			\item SPEC2000のプログラム2つに対する最適化の適用
+			\item 手続き間最適化を行うことは余り意味がない
+		\end{itemize}
+	\end{frame}
+	\begin{frame}{コンパイラ技術がアーキテクトの意思決定に及ぼす影響}
+		\begin{itemize}
+			\item 変数をどのように割り付け，アドレス付をすればよいか
+			\item いくつのレジスタが必要となるか
+			\item 高級言語の3つのデータ領域
+				\begin{itemize}
+					\item スタック
+					\item 大域データ領域
+					\item ヒープ
+				\end{itemize}
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{コンパイラ技術がアーキテクトの意思決定に及ぼす影響}
+		\begin{itemize}
+			\item スタック
+				\begin{itemize}
+					\item 局所変数を割り付け
+					\item 配列でなく単一変数
+					\item 活性レコード: 割り当てられるメモリのこと
+				\end{itemize}
+			\item 大域データ領域
+				\begin{itemize}
+					\item 大域変数や定数などの静的に宣言されるオブジェクトの割り付け
+					\item 配列などのまとまったデータ構造
+				\end{itemize}
+			\item ヒープ
+				\begin{itemize}
+					\item スタックで割り当てられない動的オブジェクトの割り付け
+					\item オブジェクトはポインタで指され，単一変数ではない
+				\end{itemize}
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{コンパイラ技術がアーキテクトの意思決定に及ぼす影響}
+		レジスタ割り付け
+		\begin{itemize}
+			\item 大域変数よりもスタック変数の方が効率が良い
+			\item スタック変数の方がレジスタに割り付けられた後の使用が多いから？
+			\item \highlight[red]{ヒープに対するレジスタ割り付けは，それがポインタを通して}\\
+				\highlight[red]{アクセスされるため，本質的に不可能である}
+			\item 同一のアドレスを持つ変数があるとレジスタに割り付けても整合性が取れない
+			\item \highlight[red]{ヒープ内の変数が効率よくエイリアスされていると言える}
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{コンパイラ作成者へのアーキテクトの支援}
+		\begin{itemize}
+			\item プログラムは局所的には単純
+				\begin{itemize}
+					\item 1行1行は単純
+					\item 複行で入り組んでいると複雑
+				\end{itemize}
+			\item 最適化だと思われるコード系列を1フェーズ毎に決める構造が，\\コンパイラを複雑にする
+			\item アーキテクチャの基本原理\\
+				頻繁なケースを高速に，稀なケースは正しく
+			\item \highlight[red]{両方のケースに対するコード生成が相互に入り組むことなく独立}\\\highlight[red]{にできるのであれば，稀な場合に対するコードの質を重視する必要性}\\\highlight[red]{は低減する}
+		\end{itemize}	
+	\end{frame}
+
+	\begin{frame}{コンパイラ作成者へのアーキテクトの支援}
+		命令セットに負荷すべき特徴
+		\begin{itemize}
+			\item 整然さの提供
+			\item プリミティブを提供すること
+			\item 複数の選択肢がある場合のトレードオフの単純化
+			\item コンパイル時に定数として判断できる数値を組み込める命令の提供
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{コンパイラ作成者へのアーキテクトの支援}
+		\begin{itemize}
+			\item 整然さの提供
+				\begin{itemize}
+					\item 命令セットの3つの主要な構成要素
+						\begin{itemize}
+							\item 命令操作
+							\item データタイプ
+							\item アドレッシングモード
+						\end{itemize}
+					\item これらは互いに直交化すべき
+				\end{itemize}
+			\item 例えば，全ての命令に全てのアドレッシングモードが適用可能な時に直交という
+			\item 命令操作によって，使えるアドレッシングモードに制限がある場合には直交ではない
+			\item \highlight[red]{このジレンマとは何か}
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{コンパイラ作成者へのアーキテクトの支援}
+		\begin{itemize}
+			\item プリミティブを提供すること(直接的な解決策ではなく)
+				\begin{itemize}
+					\item 汎用命令ではなく，単一命令を用意した方が良い
+					\item A.10の例参照
+				\end{itemize}
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{コンパイラ作成者へのアーキテクトの支援}
+		\begin{itemize}
+			\item 複数の選択肢がある場合のトレードオフの単純化
+				\begin{itemize}
+					\item コンパイラ作成者はどの命令形列が最適かを判断するのが困難
+					\item 以前は命令数やコードサイズが指標だった
+					\item 今日では，キャッシュやパイプライン処理によって考慮\\しなければいけないことが増えた
+					\item アーキテクトが指標を提供するべき
+				\end{itemize}
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{コンパイラ作成者へのアーキテクトの支援}
+		\begin{itemize}
+			\item コンパイル時に定数として判断できる数値を組み込める命令の提供
+				\begin{itemize}
+					\item コンパイル時に計算結果が分かっている値を，実行時に計算する必要はない
+					\item コンパイル時に計算し，定数扱いする命令を提供するべき
+					\item 反例:VAXのCALLS命令
+					\item 例:C++のConstant expressions
+				\end{itemize}
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{マルチメディア命令へのコンパイラの処理の支援}
+		\begin{itemize}
+			\item SIMDはプリミティブではなく解決策
+			\item ベクタアーキテクチャはベクタデータを処理の対象とする
+			\item ショートベクタコンピュータ
+				\begin{itemize}
+					\item Intel MMX (64ビット)
+						\begin{itemize}
+							\item 8ビット$\times$ 8個
+							\item 16ビット$\times$ 4個
+							\item 32ビット$\times$ 2個
+						\end{itemize}
+					\item PowerPC AltiVec (128ビット)
+						\begin{itemize}
+							\item 16ビット$\times$ 8個
+							\item 32ビット$\times$ 4個
+							\item 64ビット$\times$ 2個
+						\end{itemize}
+				\end{itemize}
+			\item Intelの128ビットへ拡張したものをSSEという
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{マルチメディア命令へのコンパイラの処理の支援}
+		\begin{itemize}
+			\item ベクタコンピュータの利点
+				\begin{itemize}
+					\item メモリ参照の回数が減る
+				\end{itemize}
+			\item ベクタコンピュータ・アドレッシングモード
+				\begin{itemize}
+					\item ストライドアドレッシング
+					\item ギャザー/スキャッターアドレッシング
+				\end{itemize}
+			\item \highlight[red]{ストライドアドレッシングとユニットストライドアドレッシング}
+			\item 例題も分からない
+			\item SIMDは手作業でコーディングされたライブラリ
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{コンパイラの役割}
+		\begin{itemize}
+			\item レジスタ割り付け $\to$ グラフ彩色法
+			\item 少なくとも汎用レジスタ16本持っておくべき
+			\item 直交性を重視するべき
+			\item 命令セットのデザインに多くのものを詰め込むことは好ましくない
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{A.9 総合的な実例: MIPSアーキテクチャ}
+		\begin{itemize}
+			\item 64ビットアーキテクチャ
+			\item MIPSが重点においていること
+				\begin{itemize}
+					\item 単純なロードストア命令セット
+					\item 固定長の命令エンコードと効率の良いパイプライン設計
+					\item コンパイラのターゲットとして効率的であること
+				\end{itemize}
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{MIPSのレジスタ}
+		\begin{itemize}
+			\item 64ビットのレジスタ
+			\item GPR: 汎用レジスタ(R0 $\sim$ R31)
+			\item FPR: 浮動小数点レジスタ(F0 $\sim$ F31)
+			\item 1つのレジスタのfloat|floatに対する命令がある
+			\item レジスタR0は常に0
+			\item 少数の特殊レジスタがある(ex. 浮動小数点状態レジスタ)
+			\item GPR $\Leftrightarrow$ FPRの転送命令も持つ
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{データタイプ}
+		\begin{itemize}
+			\item 整数データ
+				\begin{itemize}
+					\item バイト $\to$ 8ビット
+					\item ハーフワード $\to$ 16ビット
+					\item ワード $\to$ 32ビット
+					\item ダブルワード $\to$ 64ビット
+				\end{itemize}
+			\item 浮動小数点データ
+				\begin{itemize}
+					\item 単精度 $\to$ 32ビット
+					\item 倍精度 $\to$ 64ビット
+				\end{itemize}
+			\item 演算
+				\begin{itemize}
+					\item 浮動小数点は32, 64ビット
+					\item 整数は64ビットに拡張され扱われる
+				\end{itemize}
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{MIPSのデータ転送におけるアドレッシングモード}
+		\begin{itemize}
+			\item データアドレッシングモード
+				\begin{itemize}
+					\item ディスプレースメント
+					\item 即値
+				\end{itemize}
+			\item レジスタ間接 $\to$ ディスプレースメントの値を0に
+			\item 直接または絶対 $\to$ ディスプレースメントのレジスタにR0を使う
+			\item バイト単位で参照
+			\item モードビット
+				\begin{itemize}
+					\item ビッグエンディアン
+					\item リトルエンディアン(反転)
+				\end{itemize}
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{MIPSのデータ転送におけるアドレッシングモード}
+		\begin{itemize}
+			\item ロード: GPR,FPR $\Leftarrow$メモリ
+			\item ストア: GPR,FPR $\Rightarrow$メモリ
+			\item GPRのメモリ参照の単位
+				\begin{itemize}
+					\item バイト
+					\item ハーフワード
+					\item ワード
+					\item ダブルワード
+				\end{itemize}
+			\item FPRのメモリ参照の単位
+				\begin{itemize}
+					\item 単精度
+					\item 倍精度
+				\end{itemize}
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{MIPSの命令形式}
+		\begin{itemize}
+			\item アドレッシングモードが2つしかないため，オペコード中に\\エンコードされる
+			\item 命令が32ビット固定長(オペコード6ビット)
+				\begin{itemize}
+					\item I型命令
+					\item R型命令
+					\item J型命令
+				\end{itemize}
+			\item ソースレジスタとディスティネーションレジスタを指定
+			\item shamt: shift amount シフトする量
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{MIPSのオペレーション}
+		\begin{itemize}
+			\item 4つのクラスの命令
+				\begin{itemize}
+					\item ロード及びストア
+					\item ALU演算
+					\item 分岐及びジャンプ
+					\item 浮動小数点演算
+				\end{itemize}
+			\item 単精度と倍精度の変換は明示的になされる
+			\item $x \leftarrow_{n} y$ : nビット転送
+			\item $\mbox{Regs}[R4]_0$ : 上位0ビット，$\mbox{Regs}[R4]_{56..63}$ : 下位28ビット
+			\item $0^{12}$ $\to$ $000000000000$
+			\item $0110 \#\# 1100$ $\to$ $01101100$
+			\item \highlight[red]{6行目: load half ward Mem[41]は何}
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{MIPSのオペレーション}
+		\begin{itemize}
+			\item 全てのALU命令はレジスタ|レジスタ命令である(p.494 図A.1)
+			\item 即値は16ビットまでだが，LUIを使うことで拡張できる
+			\item 定数ロード: $\mbox{Regs[R1]} \Leftarrow \mbox{Regs[R0]} + \mbox{即値}$
+			\item レジスタ間の移動: $\mbox{Regs[R1]} \Leftarrow \mbox{Regs[R0]} + \mbox{Regs[R2]}$
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{MIPSの制御命令}
+		\begin{itemize}
+			\item 比較命令によってディスティネーションに値を格納することを「セット」と見なせる
+			\begin{itemize}
+				\item set-equal
+				\item set-not-equal
+				\item set-less-thanj
+			\end{itemize}
+			\item J型命令で指定できるのは26ビットだが，アドレスは32ビット
+			\item 何とかして32ビットにしたい
+			\item R31にリターンアドレスを格納
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{MIPSの制御命令}
+		\begin{itemize}
+			\item 4バイト単位でアクセス出来れば良い\\ $\to$ 単位を1バイトから4バイトにすることで4倍長い距離を指定
+			\item J name: 下位28ビットをプログラム・カウンタにセット
+			\item JAL name: 
+				\begin{itemize}
+					\item  \highlight[red]{分岐遅延スロット}のためにリターンアドレスを+8にしている
+					\item 下位28ビットをプログラム・カウンタにセット
+					\item \highlight[red]{$-2^{27}, 2^{27}, <$}の処理
+				\end{itemize}
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{MIPSの浮動小数点演算}
+		\begin{itemize}
+			\item 浮動小数点命令は，演算対象が単精度か倍精度かを指定
+			\item .Dがdoubleで.Sがsingle
+			\item 浮動小数点の比較は，特別な浮動小数点ステータス・レジスタの\\1ビットをセットする
+			\item 1つのレジスタに格納された2つの単精度浮動小数点用に\\演算を行う命令がある
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{MIPS命令セットの使用状況}
+		\begin{itemize}
+			\item ベンチマーク: SPECint2000(整数)，SPECfp2000(浮動小数点)
+			\item 5つのプログラムについて検証
+			\item 各プログラムをMIPS命令セットに変換した時の命令の割合
+			\item load，store，addが大半を占めている
+			\item \highlight[red]{cond branch}．なぜ多いか
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{A.10 誤った考え方と落とし穴}
+		\begin{itemize}
+			\item 高レベルの命令セットを設計すること
+				\begin{itemize}
+			\item アーキテクトは汎用性が高い命令を提供できるようになった
+			\item しかし，言語の要求に正確に答えることができないこともあった
+			\item セマンティックギャップ: プログラム言語とプロセッサとの間の命令の隔たり
+				\end{itemize}
+				\begin{alertblock}{セマンティッククラッシュ}
+					命令セットにあまりに多くの意味構造を与えようとして，コンピュータ設計者は，その命令を極めて制限された状況でのみ利用可能なものになってしまった
+				\end{alertblock}
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{A.10 誤った考え方と落とし穴}
+		\begin{itemize}
+			\item \sout{高レベルの命令セットを設計すること}
+				\begin{itemize}
+					\item \highlight[red]{VAXのCALLS命令の一連の動作}
+					\item 手続き呼び出しでは，ほとんどの場合多くの処理を必要としない
+					\item 言語の要求に合致していない
+					\item あまりに汎用的で，使用するときのコストが高い(必要としていない動作が多い)
+					\item VAXは単純な命令JSBを提供したが，組み込まれなかった
+					\item \highlight[red]{他のコンピュータは，呼び出し機構はコンパイラ作成者の合意}\\
+						\highlight[red]{によって標準化されている．このため，複雑であまりにも一般的な}\\\highlight[red]{手続き呼び出し命令によるオーバーへっとは不要となっている}
+				\end{itemize}
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{A.10 誤った考え方と落とし穴}
+		\begin{itemize}
+			\item \sout{代表的なプログラムとしてこのようなものがございます}
+				\begin{itemize}
+					\item 命令セットの使用状況はプログラムによって大きく異なる
+					\item 典型的なデータ転送サイズを求めることは困難
+					\item 図A.15 よく使うデータタイプはプログラムに依存
+				\end{itemize}
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{A.10 誤った考え方と落とし穴}
+		\begin{itemize}
+			\item \sout{コードサイズを減らすために，コンパイラの影響を考慮せずに}\\
+				\sout{命令セットアーキテクチャを刷新すること}
+				\begin{itemize}
+					\item 命令セットアーキテクチャは同じ
+					\item 使用するコンパイラによってコードサイズに違いが出る
+					\item まずはコンパイラが生成できる最もコンパクトなコードを用いて検討を始めるべき\\
+						$\to$ ターゲットはコンパイラが生成するものであった
+					\item 表A-15. Apogee Software Vesionを基準(1)とした時のコードサイズ\\
+						$\to$ 2倍もの差が出る
+				\end{itemize}
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{A.10 誤った考え方と落とし穴}
+		\begin{itemize}
+			\item \sout{欠点のあるアーキテクチャは成功しない}\\
+				\begin{itemize}
+					\item Intel 80x86 $\Leftrightarrow$ 他のアーキテクチャ
+						\begin{itemize}
+							\item セグメンテーション $\Leftrightarrow$ ペーンジング
+							\item 整数のデータのために拡張されたアキュムレータ $\Leftrightarrow$ 汎用レジスタ
+							\item 浮動小数点のためのスタック利用 $\Leftrightarrow$ スタック廃止
+						\end{itemize}
+					\item しかしIntelは成功を収めた
+						\begin{itemize}
+							\item IBM PCのプロセッサに採用され，バイナリ互換性が重要になった
+							\item RISC命令セットに翻訳\&実行できるようになった
+							\item 市場規模が大きいので，設計コストが高くても問題無かった．\\かつ，製品のコストが低下した
+						\end{itemize}
+				\end{itemize}
+			\item \highlight[red]{その次の段落が分からない}
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}{A.10 誤った考え方と落とし穴}
+		\begin{itemize}
+			\item \sout{欠点のないアーキテクチャを設計できる}\\
+				\begin{itemize}
+					\item トレードオフ: ハードウェア技術 $\Leftrightarrow$ ソフトウェア技術
+					\item 設計時点で正しかった決定が，今日でも正しいとは限らない
+					\item 長期的に見て性能が出るものを作ろうとすると，短期には性能が低下することを受け入れなければならない
+					\item これは命令セットにおいて致命的
+				\end{itemize}
+		\end{itemize}
+	\end{frame}
+
+
+\end{document}

@@ -32,3 +32,6 @@ test/
 *.png
 *.jpeg
 *.xbb
+
+# Adding Mar/3/2017
+*.ipynb
